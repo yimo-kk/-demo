@@ -98,7 +98,9 @@
 <script>
 //引入需要的模块
 import {addGoods} from "../common/common"
+import chooseAddress from "../chooseAdress/chooseAdress"
 export default {
+  mixins:[chooseAddress],
     data(){
         return {
             detail:[], //轮播图数据
@@ -133,25 +135,7 @@ export default {
               current
             });
         },
-        //当点击的时候选择地址
-        chooseAddress(){
-            //通过微信api让用户是否同意获取地址授权
-            wx.chooseAddress({
-              success: res => {
-                      res.detailAddres = `${res.provinceName}${res.cityName}${res.countyName}${res.detailInfo}`
-                // 给 address 赋值
-                // console.log(res.detailAddres)
-                this.address = res
-                // console.log(this.address)
-                //通过微信元素方法把数据存储到本地
-                wx.setStorageSync('address',res)
-              },
-              //当用户拒绝或者是同意了，但是没有选择地址
-              fail:err =>{
-                  // console.log(err)
-              }
-            });
-        },
+       
         // 请求详情页面的数据
         toggleSelect(index){
           //点击谁就把值给tabindex

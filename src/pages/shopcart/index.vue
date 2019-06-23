@@ -214,6 +214,30 @@ export default {
             goods_id:item.goods_id,
             goods_number:item.goods_number
           })
+      },
+      //点击去结算跳转到结算页面
+      goToPay(){
+        //跳转过去需要获取到选中商品的id
+        let ids = []
+        this.goodsList.forEach(item =>{
+          if(item.isselect) {
+            ids.push(item.goods_id)
+          }
+        })
+        //判断当选中商品是否为空
+        if(ids.length == 0){
+          // 当为空时提示
+          wx.showToast({
+            title: '请选择商品结算', //提示的内容,
+            icon: 'none', //图标,
+            duration: 2000, //延迟时间,
+            mask: true, //显示透明蒙层，防止触摸穿透,
+            success: res => {}
+          });
+          return   //就不用执行后面的
+        }
+        //编程式导航进行跳转
+        wx.navigateTo({ url: `/pages/pay/main?ids=${ids.join(',')}`});
       }
     },
 }

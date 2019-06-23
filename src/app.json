@@ -4,6 +4,7 @@
     "pages/category/main",
     "pages/shopcart/main",
     "pages/my/main",
+    "pages/pay/main",
     "pages/goods_detail/main"
   ],
   "window": {
