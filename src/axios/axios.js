@@ -3,7 +3,27 @@
 import Vue from 'vue'
 import axios from 'axios'
 // 统一设置请求路径
-axios.defaults.baseURL = 'https://www.zhengzhicheng.cn/api/public/v1/'
+axios.defaults.baseURL = 'http://127.0.0.1:8899/api/public/v1/' 
+
+//设置拦截器
+axios.interceptors.request.use(config =>{
+  //判断本地是否有token
+  if(wx.getStorageSync("token")){
+    //如果有就设置到请求头中
+    //config是整个请求
+    config.headers.Authorization =wx.getStorageSync("token")
+    // console.log(JSOn.toStringfy(wx.getStorageInfoSync("token")))
+    // console.log(wx.getStorageSync("token"))
+  }
+  //再返回 config
+  return config
+
+  //注意pc或普通请求中(以xhr的请求)设置了请求头就可以了
+  //但是微信小程序底层发送请求不是xhr 是wx.requset() 还要在适配器中修改 添加一个header
+})
+
+
+
 // 设置适配器(替换axios底层的发送网络请求方式)通过adapter方法
 axios.defaults.adapter = function (config) {
     // console.log(config)
@@ -18,10 +38,12 @@ axios.defaults.adapter = function (config) {
     mpvue.request({
       url: config.url,
       data: config.data,
-      methods: config.method,
+      method: config.method,
+      header: config.headers,
       dataType: 'json',
       success: res => {
         // 把成功请求返回出去
+       
         resolve(res)
       },
       fail: err => {
